@@ -1,6 +1,6 @@
 [project]
 name = "armory-crate"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Linux equivalent of ASUS Armoury Crate: live sensors and Aura Sync RGB lighting, read-only except for lighting."
 readme = "README.md"
 requires-python = ">=3.10"
