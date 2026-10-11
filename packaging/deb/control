@@ -1,0 +1,16 @@
+Package: armory-crate
+Version: @VERSION@
+Architecture: all
+Maintainer: anatolijphp <anatolijphp@users.noreply.github.com>
+Depends: python3, python3-gi, python3-psutil, gir1.2-gtk-4.0, gir1.2-adw-1
+Recommends: kmod
+Section: utils
+Priority: optional
+Homepage: https://github.com/anatolijphp/armory-crate-alternative-ubuntu
+Description: A Linux equivalent of ASUS Armoury Crate (sensors + Aura Sync RGB)
+ Live CPU/GPU/motherboard/memory/storage/fan readings and Aura Sync RGB
+ lighting for ASUS motherboards, talking to the hardware directly over its
+ own USB HID interface - read-only everywhere except lighting, which is
+ opcode-allow-listed and never touches device flash. GTK4/libadwaita window
+ (armory-crate) plus a background Aura Sync service, armory-crated
+ (systemctl --user enable --now armory-crated).

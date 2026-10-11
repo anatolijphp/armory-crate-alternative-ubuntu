@@ -42,31 +42,36 @@ Every fan header's RPM and duty cycle, plus the GPU fan, with a running history 
 
 ## Install
 
-Run this in a normal terminal, because it asks for your sudo password:
+Download **`armory-crate_<version>_all.deb`** from the [latest release](https://github.com/anatolijphp/armory-crate-alternative-ubuntu/releases)
+(or the newest run on the [Actions](https://github.com/anatolijphp/armory-crate-alternative-ubuntu/actions) tab) and install it:
 
 ```sh
-./packaging/install.sh
-armory-crate probe          # read-only: firmware string + config table
+sudo apt install ./armory-crate_*_all.deb    # pulls in GTK4, libadwaita and their Python bindings
+armory-crate probe                           # read-only: firmware string + config table
 # review the output, then:
 systemctl --user enable --now armory-crated
 ```
 
-The installer does the following:
-- Installs GTK4, libadwaita and their Python bindings (`apt`) - nothing to install by hand first.
-- Adds a udev rule that gives your login session access to **only** one hidraw interface: the Aura controller `0b05:19af`, interface 2.
-- Loads `nct6775` now and on every boot, which provides the fan RPMs.
-- Installs the `armory-crate` launcher, a desktop entry, and the `armory-crated` user service.
+The package adds a udev rule that gives your login session access to **only** one hidraw interface
+(the Aura controller `0b05:19af`, interface 2), and loads `nct6775` now and on every boot for fan
+RPMs. Not on Debian/Ubuntu? Unpack `armory-crate-<version>-linux.tar.gz` from the same release to `/`
+instead (`sudo tar -xzf ... -C /`), then install GTK4 + libadwaita + their Python bindings yourself.
 
-To remove it, run `./packaging/uninstall.sh`.
+To remove it: `sudo apt remove armory-crate`.
+
+### Running from a checkout
+
+No build step needed to just run it - `./packaging/install.sh` installs straight from the repo
+(asks for your sudo password, same udev/nct6775/service setup as the `.deb`, but installs the
+launcher, desktop entry and service under `~/.local` instead of system-wide). Remove it with
+`./packaging/uninstall.sh`.
 
 ## Build from source
-
-No build step - it's plain Python, run directly from a checkout:
 
 ```sh
 git clone https://github.com/anatolijphp/armory-crate-alternative-ubuntu.git
 cd armory-crate-alternative-ubuntu
-./packaging/install.sh
+./build.sh
 ```
 
 | Path | What |
@@ -75,13 +80,18 @@ cd armory-crate-alternative-ubuntu
 | [`armory_crate/aura/`](armory_crate/aura) | Device registry, USB HID protocol, software effects, sync engine |
 | [`armory_crate/sensors/`](armory_crate/sensors) | CPU, GPU, board and system readings (all read-only) |
 | [`armory_crate/daemon/`](armory_crate/daemon) | `armory-crated`: the background Aura Sync service, exposed over D-Bus |
-| [`packaging/`](packaging) | Installer, uninstaller, udev rule, systemd unit, desktop entry, icon |
+| [`packaging/`](packaging) | Checkout installer/uninstaller, udev rule, systemd unit, desktop entry, icon, `.deb` templates |
 | [`docs/`](docs) | Protocol/virtual-device notes and README media |
 | [`tests/`](tests) | Firmware safety rules and effect/driver unit tests |
 
+`build.sh` lays `armory_crate` out at `/usr/lib/python3/dist-packages` (the same place Debian/Ubuntu's own `python3-*`
+packages live) and builds `build/linux/armory-crate_<version>_all.deb`, plus an `armory-crate-<version>-linux.tar.gz`
+for other distributions - plain `dpkg-deb --build`, no debhelper, the same approach as ttlcd's own `build.sh`.
+
 Every push runs [GitHub Actions](.github/workflows/build.yml): unit tests, a compile check of every module, a
-hardware-free CLI smoke test, and off-screen screenshots of every page under Xvfb, uploaded as artifacts. Tags `v*`
-publish a release with a source archive.
+hardware-free CLI smoke test, off-screen screenshots of every page under Xvfb, and an install of the `.deb` into a
+clean Ubuntu container that then renders a screenshot through it too. Tags `v*` publish a release with the `.deb`
+and tarball.
 
 <details>
 <summary>Recording the README media</summary>

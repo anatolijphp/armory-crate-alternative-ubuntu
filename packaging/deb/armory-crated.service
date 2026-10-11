@@ -1,0 +1,15 @@
+[Unit]
+Description=Armory Crate Aura Sync service
+Documentation=https://github.com/anatolijphp/armory-crate-alternative-ubuntu
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=dbus
+BusName=org.armorycrate.Aura1
+ExecStart=/usr/bin/armory-crate daemon
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target

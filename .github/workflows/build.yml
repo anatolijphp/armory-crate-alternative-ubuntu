@@ -49,6 +49,35 @@ jobs:
           name: screenshots
           path: shots/
 
+      - name: Build .deb and tarball
+        run: ./build.sh
+
+      # A clean Ubuntu with nothing but the .deb and its dependencies: proves the package
+      # installs and both the CLI and the GUI (off-screen, under Xvfb) actually work there - the
+      # cooler/RGB/sensor hardware itself isn't attached to CI, same as ttlcd's own package test.
+      - name: Package test (clean Ubuntu 24.04)
+        run: |
+          docker run --rm -v "$PWD/build/linux:/pkg" ubuntu:24.04 sh -ec '
+            apt-get update -qq
+            DEBIAN_FRONTEND=noninteractive apt-get install -y -qq /pkg/armory-crate_*_all.deb >/dev/null
+            armory-crate devices
+            armory-crate probe
+            test -f /usr/lib/systemd/user/armory-crated.service
+            test -f /lib/udev/rules.d/60-armory-crate.rules
+            test -f /usr/share/applications/org.armorycrate.ArmoryCrate.desktop
+            DEBIAN_FRONTEND=noninteractive apt-get install -y -qq xvfb fonts-ubuntu >/dev/null
+            mkdir -p /pkg/shots
+            xvfb-run -a -s "-screen 0 1400x1400x24" armory-crate --screenshot /pkg/shots/deb-home.png home
+            test -s /pkg/shots/deb-home.png
+          '
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: armory-crate-linux
+          path: |
+            build/linux/*.deb
+            build/linux/*.tar.gz
+
   release:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [test]
@@ -56,19 +85,14 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-
-      # Pure Python, nothing to compile: the release asset is just the source tree, packaging/
-      # scripts included, at the tagged ref.
-      - name: Build source archive
-        run: |
-          version="${GITHUB_REF_NAME#v}"
-          git archive --format=tar.gz --prefix="armory-crate-$version/" \
-            -o "armory-crate-$version.tar.gz" HEAD
+      - uses: actions/download-artifact@v4
+        with:
+          name: armory-crate-linux
+          path: dist
 
       - name: Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${{ github.ref_name }}" armory-crate-*.tar.gz \
+          gh release create "${{ github.ref_name }}" dist/* \
             --repo "${{ github.repository }}" --title "${{ github.ref_name }}" --generate-notes

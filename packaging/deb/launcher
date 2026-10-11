@@ -1,0 +1,5 @@
+#!/bin/sh
+# armory-crate is installed to Python's standard dist-packages location (see build.sh), so a
+# plain `python3 -m` finds it with no PYTHONPATH needed - unlike packaging/install.sh's
+# run-from-checkout launcher, which does need one.
+exec /usr/bin/python3 -m armory_crate "$@"

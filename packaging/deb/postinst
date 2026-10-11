@@ -1,0 +1,22 @@
+#!/bin/sh
+# Applies the udev rule to hardware that's already plugged in, loads the fan-sensor module now
+# (it's already set to load on every future boot via /etc/modules-load.d), and refreshes the
+# desktop/icon caches so the app shows up in the menu immediately.
+set -e
+
+if command -v udevadm >/dev/null 2>&1; then
+    udevadm control --reload-rules || true
+    udevadm trigger --action=change --subsystem-match=hidraw || true
+fi
+
+command -v modprobe >/dev/null 2>&1 && modprobe nct6775 2>/dev/null || true
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database -q /usr/share/applications || true
+fi
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+    gtk-update-icon-cache -q /usr/share/icons/hicolor || true
+fi
+
+echo "Installed. Next: armory-crate probe   (read-only device check), then:"
+echo "         systemctl --user enable --now armory-crated"

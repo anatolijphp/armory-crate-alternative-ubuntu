@@ -7,3 +7,6 @@ venv/
 
 # CI/local screenshot output (docs/media/* is curated and committed separately)
 /shots/
+
+# build.sh output (build/<os>/..., matching ttlcd's own .gitignore)
+/build/

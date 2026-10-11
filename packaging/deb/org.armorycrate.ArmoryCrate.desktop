@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Armory Crate
+Comment=System monitor and Aura Sync lighting for ASUS ROG hardware
+Exec=armory-crate gui
+Icon=org.armorycrate.ArmoryCrate
+Terminal=false
+Categories=System;Monitor;Settings;
+Keywords=asus;rog;aura;rgb;fan;sensors;
+StartupNotify=true
