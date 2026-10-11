@@ -148,7 +148,7 @@ class NavRail(Gtk.Box):
 
 class MainWindow(Adw.ApplicationWindow):
     def __init__(self, app):
-        super().__init__(application=app, title="Armory Crate", default_width=1320, default_height=840)
+        super().__init__(application=app, title="Not Armory Crate", default_width=1320, default_height=840)
         self.set_size_request(360, 420)
         self.sampler = Sampler()
 
@@ -165,7 +165,7 @@ class MainWindow(Adw.ApplicationWindow):
         header.add_css_class("ac-titlebar")
         brand = Gtk.Box(spacing=8, margin_start=6)
         brand.append(Slash(width=14, height=18))
-        word = Gtk.Label(label="ARMORY CRATE")
+        word = Gtk.Label(label="NOT ARMORY CRATE")
         word.add_css_class("ac-wordmark")
         brand.append(word)
         header.pack_start(brand)

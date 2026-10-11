@@ -33,14 +33,14 @@ class ArmoryCrateApp(Adw.Application):
         # The window's own close button only closes the window (MainWindow.close_request hides it -
         # armory-crated keeps running regardless). This "quit" action is the actual way to exit: via
         # Ctrl+Q, the tray icon's menu (below), and the app's menubar registration (so a real global-menu
-        # setup can show "Quit Armory Crate" too - though the one GNOME Shell extension available here
+        # setup can show "Quit Not Armory Crate" too - though the one GNOME Shell extension available here
         # doesn't actually read it, see window.py).
         quit_action = Gio.SimpleAction.new("quit", None)
         quit_action.connect("activate", lambda *_a: self.quit())
         self.add_action(quit_action)
         self.set_accels_for_action("app.quit", ["<primary>q"])
         menu = Gio.Menu()
-        menu.append("Quit Armory Crate", "app.quit")
+        menu.append("Quit Not Armory Crate", "app.quit")
         self.set_menubar(menu)
 
         from .tray import TrayIcon

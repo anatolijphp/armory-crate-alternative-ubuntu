@@ -1,6 +1,6 @@
 <div align="center">
 
-# Armory Crate for Linux
+# Not Armory Crate for Linux
 
 **A Linux equivalent of ASUS Armoury Crate: live sensors and Aura Sync RGB lighting, read-only except for lighting.**
 
@@ -11,7 +11,7 @@ Python, GTK4 and libadwaita. No Windows, no Armoury Crate service, no telemetry.
 ![platform](https://img.shields.io/badge/platform-Ubuntu%20%7C%20GNOME-0078d4)
 ![python](https://img.shields.io/badge/Python-3.10%2B-512bd4)
 
-<img src="docs/media/home.png" alt="Armory Crate home dashboard: CPU, GPU, motherboard, memory, storage and fan tiles" width="860">
+<img src="docs/media/home.png" alt="Not Armory Crate home dashboard: CPU, GPU, motherboard, memory, storage and fan tiles" width="860">
 
 </div>
 

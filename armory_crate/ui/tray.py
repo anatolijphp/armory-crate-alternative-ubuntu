@@ -5,7 +5,7 @@ needs a GTK3 Gtk.Menu for its menu, which can't be constructed from a process th
 plain D-Bus, so implementing them directly sidesteps the GTK3/GTK4 conflict entirely. Confirmed feasible on
 this system: org.kde.StatusNotifierWatcher is live here (that's what Docker's own tray icon registers with).
 
-Menu: Show Armory Crate, an "Aura Sync Effect" submenu (one radio item per effects.EFFECTS key, talking
+Menu: Show Not Armory Crate, an "Aura Sync Effect" submenu (one radio item per effects.EFFECTS key, talking
 straight to armory-crated over D-Bus via the same client module the Aura page uses - no GTK involved), and
 Quit. Activate (primary click/scroll-click on the icon itself) shows the window. No dynamic icon/status.
 """
@@ -93,14 +93,14 @@ MENU_XML = """
 ITEM_PROPS = {
     "Category": GLib.Variant("s", "ApplicationStatus"),
     "Id": GLib.Variant("s", "org.armorycrate.ArmoryCrate"),
-    "Title": GLib.Variant("s", "Armory Crate"),
+    "Title": GLib.Variant("s", "Not Armory Crate"),
     "Status": GLib.Variant("s", "Active"),
     "WindowId": GLib.Variant("i", 0),
     "IconName": GLib.Variant("s", "org.armorycrate.ArmoryCrate"),
     "IconThemePath": GLib.Variant("s", ""),
     "ItemIsMenu": GLib.Variant("b", False),
     "Menu": GLib.Variant("o", MENU_PATH),
-    "ToolTip": GLib.Variant("(sa(iiay)ss)", ("org.armorycrate.ArmoryCrate", [], "Armory Crate", "")),
+    "ToolTip": GLib.Variant("(sa(iiay)ss)", ("org.armorycrate.ArmoryCrate", [], "Not Armory Crate", "")),
 }
 
 MENU_PROPS = {
@@ -183,12 +183,12 @@ class TrayIcon:
 
     def _flat_item_props(self):
         current, connected = self._current_effect()
-        props = {MENU_SHOW: _menu_item_props("Show Armory Crate"),
+        props = {MENU_SHOW: _menu_item_props("Show Not Armory Crate"),
                  MENU_EFFECTS: {"label": GLib.Variant("s", "Aura Sync Effect"),
                                 "children-display": GLib.Variant("s", "submenu"),
                                 "enabled": GLib.Variant("b", True), "visible": GLib.Variant("b", True)},
                  MENU_SEPARATOR: {"type": GLib.Variant("s", "separator"), "visible": GLib.Variant("b", True)},
-                 MENU_QUIT: _menu_item_props("Quit Armory Crate")}
+                 MENU_QUIT: _menu_item_props("Quit Not Armory Crate")}
         for key in EFFECT_KEYS:
             props[EFFECT_IDS[key]] = _effect_item_props(key, current, connected)
         return props

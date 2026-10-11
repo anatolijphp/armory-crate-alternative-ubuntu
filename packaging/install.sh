@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Armory Crate installer for Ubuntu 26.04 (GNOME / Wayland).
+# Not Armory Crate installer for Ubuntu 26.04 (GNOME / Wayland).
 #
 #   ./packaging/install.sh                   system + user setup (asks for sudo once)
 #   ./packaging/install.sh --enable-service  also enable + start armory-crated

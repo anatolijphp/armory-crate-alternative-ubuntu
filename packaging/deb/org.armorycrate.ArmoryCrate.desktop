@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=Armory Crate
+Name=Not Armory Crate
 Comment=System monitor and Aura Sync lighting for ASUS ROG hardware
 Exec=armory-crate gui
 Icon=org.armorycrate.ArmoryCrate

@@ -1,5 +1,5 @@
 [Unit]
-Description=Armory Crate Aura Sync service
+Description=Not Armory Crate Aura Sync service
 Documentation=https://github.com/anatolijphp/armory-crate-alternative-ubuntu
 PartOf=graphical-session.target
 After=graphical-session.target
