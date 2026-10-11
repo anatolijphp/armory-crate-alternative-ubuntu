@@ -1,0 +1,16 @@
+# Armory Crate: let the logged-in user (uaccess) open ONLY the verified RGB
+# control interface. Other interfaces stay root-only; the ROG monitor
+# (0b05:1ba3, no verified protocol) and SteelSeries devices (excluded from the
+# project) are intentionally not listed.
+#
+# Matching uses the usb_id builtin's properties: in udev all ATTRS{} keys of
+# a rule must match one single parent device, and idVendor (USB device) and
+# bInterfaceNumber (USB interface) live on different parents.
+
+SUBSYSTEM!="hidraw", GOTO="armory_crate_end"
+IMPORT{builtin}="usb_id"
+
+# ASUS Aura USB mainboard controller, interface 2 (usage page 0xFF72)
+ENV{ID_USB_VENDOR_ID}=="0b05", ENV{ID_USB_MODEL_ID}=="19af", ENV{ID_USB_INTERFACE_NUM}=="02", TAG+="uaccess"
+
+LABEL="armory_crate_end"

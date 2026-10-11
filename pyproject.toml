@@ -1,0 +1,27 @@
+[project]
+name = "armory-crate"
+version = "0.1.0"
+description = "A Linux equivalent of ASUS Armoury Crate: live sensors and Aura Sync RGB lighting, read-only except for lighting."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "PyGObject>=3.42",
+    "psutil>=5.9",
+]
+
+[project.optional-dependencies]
+# --record only (docs/media GIFs); the app itself never imports PIL.
+dev = ["pillow"]
+
+[project.scripts]
+armory-crate = "armory_crate.__main__:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["armory_crate*"]
+
+[tool.setuptools.package-data]
+armory_crate = ["ui/style.css"]

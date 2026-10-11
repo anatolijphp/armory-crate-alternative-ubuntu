@@ -1,0 +1,74 @@
+name: build
+
+on:
+  push:
+    branches: [main, 'ci/**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # GTK4 + libadwaita + the Python bindings packaging/install.sh installs on a real machine,
+      # plus Xvfb (for off-screen rendering) and Pillow (--record/--screenshot tooling only).
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq python3-gi python3-psutil gir1.2-gtk-4.0 gir1.2-adw-1 python3-pil xvfb
+
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -t .
+
+      - name: Compile-check every module
+        run: python3 -m compileall -q armory_crate
+
+      # Safe with no RGB/sensor hardware attached: sysfs-only discovery and a read-only probe of
+      # whatever's there (nothing, on this runner) - proves the CLI itself doesn't need the GUI.
+      - name: CLI smoke test
+        run: |
+          PYTHONPATH=. python3 -m armory_crate devices
+          PYTHONPATH=. python3 -m armory_crate probe
+
+      # Off-screen rendering under Xvfb (armory-crate's own --screenshot - same idea as ttlcd's
+      # TTLcdStudio.exe --screenshot): one PNG per page, catches layout crashes and gives
+      # reviewable artifacts on every push.
+      - name: Screenshots
+        run: |
+          mkdir -p shots
+          for p in home aura cpu fans system; do
+            PYTHONPATH=. xvfb-run -a -s "-screen 0 1400x1400x24" \
+              python3 -m armory_crate --screenshot "shots/$p.png" "$p"
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: shots/
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pure Python, nothing to compile: the release asset is just the source tree, packaging/
+      # scripts included, at the tagged ref.
+      - name: Build source archive
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          git archive --format=tar.gz --prefix="armory-crate-$version/" \
+            -o "armory-crate-$version.tar.gz" HEAD
+
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" armory-crate-*.tar.gz \
+            --repo "${{ github.repository }}" --title "${{ github.ref_name }}" --generate-notes

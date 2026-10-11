@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# CI/local screenshot output (docs/media/* is curated and committed separately)
+/shots/

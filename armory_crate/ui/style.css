@@ -1,0 +1,545 @@
+@define-color accent_bg_color #e0182b;
+@define-color accent_fg_color #ffffff;
+@define-color accent_color #ff4d5d;
+@define-color card_bg_color #17171b;
+
+/* Armoury-Crate look: near-black surfaces, ROG red accents, condensed
+   uppercase headings, chamfered panels. The app forces the dark scheme. */
+
+:root {
+  --ac-red: #ff1a2e;
+  --ac-red-dim: rgba(255, 26, 46, 0.18);
+  --ac-bg: #0c0c0e;
+  --ac-sidebar: #08080a;
+  --ac-panel: #17171b;
+  --ac-panel-2: #1f1f25;
+  --ac-line: #2a2a31;
+  --ac-text: #ededf0;
+  --ac-dim: #8d8d96;
+
+  /* libadwaita palette overrides */
+  --accent-bg-color: #e0182b;
+  --accent-fg-color: #ffffff;
+  --accent-color: #ff4d5d;
+  --window-bg-color: #0c0c0e;
+  --window-fg-color: #ededf0;
+  --view-bg-color: #0c0c0e;
+  --headerbar-bg-color: #050506;
+  --headerbar-fg-color: #ededf0;
+  --headerbar-shade-color: transparent;
+  --sidebar-bg-color: #08080a;
+  --card-bg-color: #17171b;
+  --popover-bg-color: #1b1b20;
+  --dialog-bg-color: #17171b;
+}
+
+window {
+  font-family: "Ubuntu Sans", sans-serif;
+}
+
+/* ---------- chrome ---------- */
+headerbar {
+  background: #050506;
+  box-shadow: inset 0 -1px #1d1d22;
+  min-height: 46px;
+}
+
+.ac-wordmark {
+  font-family: "Ubuntu Sans";
+  font-stretch: condensed;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 3px;
+  color: var(--ac-text);
+}
+
+.ac-content {
+  background-color: var(--ac-bg);
+  background-image:
+    radial-gradient(circle at 100% 0%, rgba(255, 26, 46, 0.13), transparent 45%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.012) 0px, rgba(255, 255, 255, 0.012) 1px,
+                              transparent 1px, transparent 14px);
+}
+
+/* ---------- title bar ---------- */
+headerbar.ac-titlebar {
+  background: #000000;
+  box-shadow: inset 0 -1px #1d1d22;
+  min-height: 48px;
+  padding-left: 6px;
+}
+
+.ac-menu-button {
+  min-width: 40px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 0;
+  color: var(--ac-dim);
+}
+
+.ac-menu-button:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ---------- navigation rail ---------- */
+.ac-rail {
+  background: var(--ac-sidebar);
+  box-shadow: inset -1px 0 #1d1d22;
+}
+
+.ac-nav {
+  background: transparent;
+  padding: 12px 0;
+}
+
+.ac-nav > row {
+  min-height: 50px;
+  margin: 2px 0;
+  padding: 0 20px 0 18px;
+  border-radius: 0;
+  color: var(--ac-dim);
+  border-left: 3px solid transparent;
+  transition: background 120ms, color 120ms, border-color 120ms;
+}
+
+.ac-nav > row:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ac-text);
+}
+
+.ac-nav > row:selected {
+  background-color: transparent;
+  background-image: linear-gradient(90deg, rgba(255, 26, 46, 0.30), rgba(255, 26, 46, 0.0) 90%);
+  border-left-color: var(--ac-red);
+  color: #ffffff;
+}
+
+.ac-nav > row:selected .ac-icon {
+  color: var(--ac-red);
+}
+
+.ac-nav-label {
+  font-stretch: condensed;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.ac-sidebar-footer {
+  padding: 14px 18px;
+  color: #55555d;
+  font-size: 11px;
+}
+
+/* ---------- tabs (Aura: Effects / Sync devices) ---------- */
+.ac-tabs button {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 8px 18px;
+  font-stretch: condensed;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--ac-dim);
+  border-bottom: 2px solid transparent;
+}
+
+.ac-tabs button:hover {
+  color: #ffffff;
+}
+
+.ac-tabs button:checked {
+  color: #ffffff;
+  border-bottom-color: var(--ac-red);
+  background-image: linear-gradient(0deg, rgba(255, 26, 46, 0.14), transparent 70%);
+}
+
+/* ---------- effect list ---------- */
+.ac-effects > row {
+  min-height: 46px;
+  padding: 0 14px;
+  border-radius: 0;
+  color: var(--ac-dim);
+  border-left: 3px solid transparent;
+  background: transparent;
+}
+
+.ac-effects > row:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+}
+
+.ac-effects > row:selected {
+  background-color: transparent;
+  background-image: linear-gradient(90deg, rgba(255, 26, 46, 0.26), rgba(255, 26, 46, 0.0) 90%);
+  border-left-color: var(--ac-red);
+  color: #ffffff;
+}
+
+.ac-effects > row:selected .ac-icon {
+  color: var(--ac-red);
+}
+
+.ac-effects {
+  background: transparent;
+}
+
+.ac-effect-label {
+  font-stretch: condensed;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.ac-scene {
+  background-color: #050506;
+  background-image: radial-gradient(ellipse at 50% 100%, rgba(255, 26, 46, 0.10), transparent 70%);
+  border: 1px solid var(--ac-line);
+}
+
+button.ac-swatch {
+  min-width: 26px;
+  min-height: 26px;
+  padding: 0;
+  border-radius: 0;
+  border: 2px solid transparent;
+  box-shadow: none;
+}
+
+button.ac-swatch:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+button.ac-swatch.selected {
+  border-color: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+}
+
+/* ---------- page title ---------- */
+.ac-title {
+  font-stretch: condensed;
+  font-weight: 800;
+  font-size: 30px;
+  letter-spacing: 2px;
+  color: #ffffff;
+}
+
+.ac-title-bar {
+  min-width: 56px;
+  min-height: 3px;
+  margin-top: 4px;
+  background: var(--ac-red);
+  box-shadow: 0 0 10px rgba(255, 26, 46, 0.6);
+}
+
+.ac-subtitle {
+  margin-top: 8px;
+  color: var(--ac-dim);
+}
+
+/* ---------- panels ---------- */
+.ac-panel {
+  padding: 16px 18px 18px 18px;
+  color: var(--ac-text);
+  /* chamfered top-left and bottom-right corners */
+  background-color: transparent;
+  background-image:
+    linear-gradient(135deg, transparent 14px, var(--ac-panel) 14px),
+    linear-gradient(315deg, transparent 14px, var(--ac-panel) 14px);
+  background-size: 100% 51%, 100% 51%;
+  background-position: top, bottom;
+  background-repeat: no-repeat;
+}
+
+.ac-panel-accent {
+  background-image:
+    linear-gradient(135deg, transparent 14px, var(--ac-panel) 14px),
+    linear-gradient(315deg, transparent 14px, var(--ac-panel) 14px),
+    linear-gradient(90deg, var(--ac-red), var(--ac-red));
+  background-size: 100% 51%, 100% 51%, 2px 60%;
+  background-position: top, bottom, left center;
+}
+
+.ac-heading {
+  font-stretch: condensed;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: #ffffff;
+}
+
+.ac-dim {
+  color: var(--ac-dim);
+}
+
+.ac-big {
+  font-stretch: condensed;
+  font-weight: 800;
+  font-size: 28px;
+  color: #ffffff;
+}
+
+.ac-red {
+  color: var(--ac-red);
+}
+
+/* ---------- gauges & meters ---------- */
+.ac-gauge-value {
+  font-stretch: condensed;
+  font-weight: 800;
+  font-size: 26px;
+  color: #ffffff;
+}
+
+.ac-gauge-unit {
+  font-size: 11px;
+  color: var(--ac-dim);
+  letter-spacing: 1px;
+}
+
+.ac-gauge-caption {
+  margin-bottom: 6px;
+  font-stretch: condensed;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--ac-dim);
+}
+
+.ac-meter-label {
+  font-stretch: condensed;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--ac-dim);
+}
+
+.ac-meter-value {
+  font-stretch: condensed;
+  font-weight: 700;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+levelbar > trough {
+  min-height: 4px;
+  padding: 0;
+  border-radius: 0;
+  background-color: #2a2a31;
+  border: none;
+  box-shadow: none;
+}
+
+levelbar > trough > block {
+  min-height: 4px;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+}
+
+levelbar > trough > block.filled {
+  background-color: var(--ac-red);
+  background-image: linear-gradient(90deg, #7a0914, var(--ac-red));
+}
+
+levelbar > trough > block.empty {
+  background-color: transparent;
+}
+
+/* ---------- lists (Adw rows inside panels) ---------- */
+list.boxed-list,
+.ac-panel list.boxed-list {
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  outline: none;
+}
+
+list.boxed-list > row,
+list.boxed-list > row.activatable,
+list.boxed-list > row.expander {
+  background-color: transparent;
+  border-bottom: 1px solid var(--ac-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+list.boxed-list > row:last-child {
+  border-bottom: none;
+}
+
+list.boxed-list > row.activatable:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+row .title {
+  font-weight: 600;
+}
+
+/* ---------- view-only strip ---------- */
+.ac-strip {
+  padding: 8px 16px;
+  background-color: #1a0b0e;
+  box-shadow: inset 0 -1px rgba(255, 26, 46, 0.4);
+}
+
+.ac-strip label {
+  font-stretch: condensed;
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 12px;
+  color: #ff8a95;
+}
+
+/* ---------- banners ---------- */
+banner > revealer > widget {
+  background: #1a0b0e;
+  box-shadow: inset 0 -1px rgba(255, 26, 46, 0.4);
+  color: #ffb3ba;
+}
+
+banner .heading {
+  font-stretch: condensed;
+  letter-spacing: 1px;
+}
+
+/* ---------- controls ---------- */
+scale > trough {
+  min-height: 4px;
+  border-radius: 0;
+  background-color: #2a2a31;
+}
+
+scale > trough > highlight {
+  border-radius: 0;
+  background-color: var(--ac-red);
+}
+
+scale > trough > slider {
+  min-width: 14px;
+  min-height: 14px;
+  margin: -6px;
+  border-radius: 0;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px var(--ac-red), 0 0 8px rgba(255, 26, 46, 0.6);
+}
+
+scale > value {
+  color: var(--ac-dim);
+  font-weight: 700;
+}
+
+*:focus-visible {
+  outline-color: rgba(255, 26, 46, 0.6);
+}
+
+button.ac-segment {
+  border-radius: 0;
+  padding: 6px 16px;
+  font-stretch: condensed;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: var(--ac-panel-2);
+  color: var(--ac-dim);
+}
+
+button.ac-segment:checked {
+  background: var(--ac-red);
+  color: #ffffff;
+}
+
+checkbutton check {
+  border-radius: 0;
+}
+
+checkbutton check:checked {
+  background: var(--ac-red);
+  color: #ffffff;
+}
+
+switch {
+  border-radius: 0;
+  background-color: #2a2a31;
+}
+
+switch > slider {
+  border-radius: 0;
+}
+
+switch:checked {
+  background-color: var(--ac-red);
+}
+
+colorswatch,
+.ac-color-button button {
+  border-radius: 0;
+}
+
+/* ---------- Aura effect tiles ---------- */
+.ac-effect-tile {
+  padding: 10px;
+  border: 1px solid var(--ac-line);
+  background: var(--ac-panel-2);
+  border-radius: 0;
+  transition: border-color 120ms, background 120ms;
+}
+
+.ac-effect-tile:hover {
+  border-color: #4a4a52;
+}
+
+flowboxchild:selected .ac-effect-tile,
+.ac-effect-tile.selected {
+  border-color: var(--ac-red);
+  background-image: linear-gradient(180deg, rgba(255, 26, 46, 0.16), rgba(255, 26, 46, 0.0));
+  box-shadow: 0 0 12px rgba(255, 26, 46, 0.35);
+}
+
+flowboxchild {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  outline: none;
+}
+
+flowboxchild:selected {
+  background: transparent;
+}
+
+.ac-effect-name {
+  font-stretch: condensed;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.ac-preview-strip {
+  border: 1px solid var(--ac-line);
+}
+
+.ac-badge {
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: #2a2a31;
+  color: var(--ac-dim);
+}
+
+.ac-badge.ok {
+  background: rgba(255, 26, 46, 0.18);
+  color: #ff6b78;
+}
+
+/* ---------- fans ---------- */
+.ac-fan-card {
+  min-width: 180px;
+}
+
+.ac-graph-frame,
+.ac-graph-frame > border {
+  border: none;
+  border-radius: 0;
+}
