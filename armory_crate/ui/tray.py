@@ -8,6 +8,11 @@ this system: org.kde.StatusNotifierWatcher is live here (that's what Docker's ow
 Menu: Show Not Armory Crate, an "Aura Sync Effect" submenu (one radio item per effects.EFFECTS key, talking
 straight to armory-crated over D-Bus via the same client module the Aura page uses - no GTK involved), and
 Quit. Activate (primary click/scroll-click on the icon itself) shows the window. No dynamic icon/status.
+
+Hosts that support it (GNOME's ubuntu-appindicators extension does) call ProvideXdgActivationToken right
+before Activate or a menu click. Without that token, Mutter's focus-stealing prevention leaves an
+already-open window behind the others ("is ready" notification) instead of raising it, so the token is
+handed to on_show and spent on the next present().
 """
 
 from gi.repository import Gio, GLib
@@ -36,6 +41,7 @@ ITEM_XML = """
     <method name="SecondaryActivate"><arg type="i" name="x" direction="in"/><arg type="i" name="y" direction="in"/></method>
     <method name="ContextMenu"><arg type="i" name="x" direction="in"/><arg type="i" name="y" direction="in"/></method>
     <method name="Scroll"><arg type="i" name="delta" direction="in"/><arg type="s" name="orientation" direction="in"/></method>
+    <method name="ProvideXdgActivationToken"><arg type="s" name="token" direction="in"/></method>
     <signal name="NewIcon"/>
     <signal name="NewTitle"/>
     <signal name="NewToolTip"/>
@@ -132,13 +138,15 @@ def _effect_item_props(key, current, connected):
 
 
 class TrayIcon:
-    """Owns the StatusNotifierItem/dbusmenu D-Bus objects. on_show and on_quit are plain callables run on
-    the main loop thread (the same one GTK runs on - D-Bus method calls arrive on it already)."""
+    """Owns the StatusNotifierItem/dbusmenu D-Bus objects. on_show(activation_token_or_None) and on_quit()
+    are plain callables run on the main loop thread (the same one GTK runs on - D-Bus method calls arrive
+    on it already)."""
 
     def __init__(self, connection, on_show, on_quit):
         self._connection = connection
         self._on_show = on_show
         self._on_quit = on_quit
+        self._activation_token = None
         self._item_info = Gio.DBusNodeInfo.new_for_xml(ITEM_XML)
         self._menu_info = Gio.DBusNodeInfo.new_for_xml(MENU_XML)
         self._item_reg_id = connection.register_object(
@@ -160,8 +168,10 @@ class TrayIcon:
         return ITEM_PROPS.get(prop_name)
 
     def _handle_item_call(self, connection, sender, path, interface, method, params, invocation, user_data=None):
-        if method in ("Activate", "SecondaryActivate"):
-            GLib.idle_add(self._on_show)
+        if method == "ProvideXdgActivationToken":
+            self._activation_token = params.unpack()[0] or None
+        elif method in ("Activate", "SecondaryActivate"):
+            GLib.idle_add(self._show)
         # ContextMenu/Scroll: nothing to do - the host opens Menu itself for ContextMenu.
         invocation.return_value(None)
 
@@ -218,8 +228,10 @@ class TrayIcon:
         elif method == "Event":
             item_id, event_id = params.unpack()[0], params.unpack()[1]
             if event_id == "clicked":
+                if item_id != MENU_SHOW:
+                    self._activation_token = None  # the host sends one before every click; only Show uses it
                 if item_id == MENU_SHOW:
-                    GLib.idle_add(self._on_show)
+                    GLib.idle_add(self._show)
                 elif item_id == MENU_QUIT:
                     GLib.idle_add(self._on_quit)
                 elif item_id in ID_TO_EFFECT:
@@ -235,6 +247,10 @@ class TrayIcon:
             invocation.return_value(GLib.Variant("(b)", (False,)))
         else:
             invocation.return_value(None)
+
+    def _show(self):
+        token, self._activation_token = self._activation_token, None
+        self._on_show(token)
 
     def _set_effect(self, name):
         proxy = client.connect()
