@@ -123,8 +123,6 @@ armory-crate --record <path.gif> <page>            render a short scripted tour 
 | ASUS Aura mainboard `0b05:19af`: onboard LEDs, RGB header, ARGB header | ✅ Direct mode | OpenRGB `AsusAuraUSBController` |
 | ROG monitor `0b05:1ba3` | ⚠ Display only | No public protocol; OpenRGB doesn't support it |
 
-SteelSeries devices are excluded: their lighting is left to the devices themselves.
-
 All effects are rendered in software and sent with the volatile **Direct** commands. Hardware effect modes are unreliable on `19af`, according to OpenRGB issue #3157.
 
 For ARGB headers, set the LED count on the Aura page. The hardware can't report it.
